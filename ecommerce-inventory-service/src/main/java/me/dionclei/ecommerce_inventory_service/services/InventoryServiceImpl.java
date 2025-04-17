@@ -15,9 +15,9 @@ public class InventoryServiceImpl implements InventoryService {
 		this.inventoryRepository = inventoryRepository;
 	}
 	
-	public boolean isInStock(String productCode) {
+	public boolean isInStock(String productCode, Integer quantity) {
 		Inventory inv = inventoryRepository.findByProductCode(productCode);
-		return inv != null && inv.getQuantity() > 0;
+		return inv != null && inv.getQuantity() > quantity;
 	}
 
 }

@@ -19,8 +19,8 @@ public class InventoryController {
     }
 
     @GetMapping
-    public ResponseEntity<Boolean> isInStock(@RequestParam String productCode) {
-        boolean available = service.isInStock(productCode);
+    public ResponseEntity<Boolean> isInStock(@RequestParam String productCode, @RequestParam(defaultValue = "1") Integer quantity) {
+        boolean available = service.isInStock(productCode, quantity);
         return ResponseEntity.ok(available);
     }
 }
