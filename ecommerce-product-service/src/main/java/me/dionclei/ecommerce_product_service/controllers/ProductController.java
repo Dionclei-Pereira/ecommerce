@@ -35,8 +35,6 @@ public class ProductController {
     	try {
     		return ResponseEntity.ok().body(prodService.save(product.toObj()));
     	} catch (Exception e) {
-			System.out.println(e.getMessage());
-			System.out.println(e.getClass());
 			return ResponseEntity.badRequest().build();
 		}
     }
