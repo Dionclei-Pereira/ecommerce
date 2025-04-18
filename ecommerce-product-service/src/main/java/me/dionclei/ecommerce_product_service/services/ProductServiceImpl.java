@@ -34,7 +34,7 @@ public class ProductServiceImpl implements ProductService {
 		if (product.isPresent()) {
 			return product.get().toDTO();
 		} else {
-			throw new ResourceNotFoundException("User not found");
+			throw new ResourceNotFoundException("Product not found");
 		}
 	}
 
