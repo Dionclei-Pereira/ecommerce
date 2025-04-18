@@ -13,7 +13,7 @@ import me.dionclei.ecommerce_user_service.exceptions.ResourceNotFoundException;
 import me.dionclei.ecommerce_user_service.services.interfaces.UserService;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/users")
 public class UserController {
 	
 	private UserService userService;
