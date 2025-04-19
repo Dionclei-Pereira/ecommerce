@@ -13,9 +13,10 @@ import java.security.spec.X509EncodedKeySpec;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.time.temporal.TemporalUnit;
 import java.util.Base64;
+import java.util.stream.Collectors;
 
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import com.auth0.jwt.JWT;
@@ -41,13 +42,16 @@ public class TokenServiceRSA implements TokenService {
 			return JWT.create().withIssuer("Ecommerce")
 					.withExpiresAt(generateExpiresAt())
 					.withSubject(user.getId().toString())
+					.withClaim("roles", user.getAuthorities()
+						    .stream()
+						    .map(GrantedAuthority::getAuthority)
+						    .collect(Collectors.toList()))
 					.sign(Algorithm.RSA256(privateKey));
 		} catch (JWTCreationException e) {
 			return null;
 		}
 	}
 	
-
 	@Override
 	public String validateToken(String token) {
 		try {

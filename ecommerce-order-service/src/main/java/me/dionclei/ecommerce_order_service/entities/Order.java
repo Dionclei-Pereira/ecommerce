@@ -22,6 +22,8 @@ public class Order {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	private Long userId;
+	
 	private Instant orderDate;
 	
 	@Enumerated(EnumType.STRING)
@@ -32,20 +34,33 @@ public class Order {
 	
 	public Order() {}
 	
-	public Order(Long id, Instant orderDate, Status status, List<OrderItem> items) {
+	public Order(Long id, Long userId, Instant orderDate, Status status, List<OrderItem> items) {
 		super();
 		this.id = id;
 		this.orderDate = orderDate;
 		this.status = status;
 		this.items = items;
 	}
-
+	
+	public Double getTotal() {
+		return items.stream().map(i -> i.getPrice()).reduce(0.0, Double::sum);
+	}
+	
 	public Long getId() {
 		return id;
 	}
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	
+	public Long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 
 	public Instant getOrderDate() {
