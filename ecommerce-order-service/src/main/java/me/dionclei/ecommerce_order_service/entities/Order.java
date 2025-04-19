@@ -1,5 +1,6 @@
 package me.dionclei.ecommerce_order_service.entities;
 
+import java.io.Serializable;
 import java.time.Instant;
 import java.util.List;
 
@@ -16,8 +17,10 @@ import me.dionclei.ecommerce_order_service.enums.Status;
 
 @Entity
 @Table(name = "orders")
-public class Order {
+public class Order implements Serializable {
 	
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -38,6 +41,7 @@ public class Order {
 		super();
 		this.id = id;
 		this.orderDate = orderDate;
+		this.userId = userId;
 		this.status = status;
 		this.items = items;
 	}

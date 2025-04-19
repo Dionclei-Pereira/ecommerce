@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import me.dionclei.ecommerce_order_service.clients.InventoryClient;
 import me.dionclei.ecommerce_order_service.clients.ProductClient;
@@ -32,8 +31,7 @@ public class OrderService {
 		this.orderRepository = orderRepository;
 	}
 	
-	@Transactional
-	public void placeOrder(OrderRequest request) {
+	public void placeOrder(OrderRequest request, String id) {
 		List<OrderItem> orderItems = new ArrayList<>();
 		for (OrderItemDTO itemDto : request.items()) {
 			ProductDTO product = null;
@@ -55,16 +53,13 @@ public class OrderService {
             item.setQuantity(itemDto.quantity());
             orderItems.add(item);
 		}
-        Order order = new Order();
-        order.setOrderDate(Instant.now());
-        order.setStatus(Status.PLACED);
-        order.setItems(orderItems);
-
+        Order order = new Order(null, Long.parseLong(id), Instant.now(), Status.PLACED, orderItems);
+        
         orderRepository.save(order);
 	}
 
-	public List<Order> findAll() {
-		return orderRepository.findAll();
+	public List<Order> findAll(Long id) {
+		return orderRepository.findAllById(id);
 	}
 
 }

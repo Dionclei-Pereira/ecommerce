@@ -2,7 +2,6 @@ package me.dionclei.ecommerce_order_service.configs;
 
 import java.nio.file.Paths;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -22,7 +21,7 @@ public class SecurityConfig {
 	SecurityFilterChain filterChain(HttpSecurity security, SecurityFilter filter) throws Exception {
 		return security.csrf(c -> c.disable())
 				.sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-				.authorizeHttpRequests(auth -> auth.anyRequest().hasRole("ADMIN"))
+				.authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
 				.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
 				.build();
 	}

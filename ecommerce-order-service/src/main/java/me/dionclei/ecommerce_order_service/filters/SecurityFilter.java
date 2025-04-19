@@ -1,11 +1,7 @@
 package me.dionclei.ecommerce_order_service.filters;
 
 import java.io.IOException;
-import java.util.Collection;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -33,7 +29,7 @@ public class SecurityFilter extends OncePerRequestFilter {
 		if (token != null) {
 			UserAuth user = tokenService.validateToken(token);
 			if (user != null) {
-				@SuppressWarnings("unchecked")
+
 				var roles = user.roles().stream().map(SimpleGrantedAuthority::new).toList();
 				var auth = new UsernamePasswordAuthenticationToken(user.id(), null, roles);
 				SecurityContextHolder.getContext().setAuthentication(auth);

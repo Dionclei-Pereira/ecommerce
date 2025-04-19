@@ -28,9 +28,9 @@ public class OrderController {
     }
     
     @PostMapping
-    public ResponseEntity<String> placeOrder(@RequestBody OrderRequest request) {
+    public ResponseEntity<String> placeOrder(@RequestBody OrderRequest request, Principal princpal) {
         try {
-            orderService.placeOrder(request);
+            orderService.placeOrder(request, princpal.getName());
             return ResponseEntity.ok("Order created successfully!");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
@@ -39,7 +39,7 @@ public class OrderController {
     
     @GetMapping
     public ResponseEntity<List<Order>> findAll(Principal principal) {
-        return ResponseEntity.ok().body(orderService.findAll());
+        return ResponseEntity.ok().body(orderService.findAll(Long.parseLong(principal.getName())));
     }
 
 }
