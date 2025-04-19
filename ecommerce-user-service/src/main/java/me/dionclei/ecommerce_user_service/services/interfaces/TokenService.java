@@ -6,4 +6,6 @@ public interface TokenService {
 	
 	String generateToken(EcommerceUser user);
 	
+	String validateToken(String token);
+	
 }
