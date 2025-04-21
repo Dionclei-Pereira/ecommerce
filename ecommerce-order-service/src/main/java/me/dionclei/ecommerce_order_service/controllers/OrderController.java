@@ -28,9 +28,9 @@ public class OrderController {
     }
     
     @PostMapping
-    public ResponseEntity<String> placeOrder(@RequestBody OrderRequest request, Principal princpal) {
+    public ResponseEntity<String> placeOrder(@RequestBody OrderRequest request, Principal principal) {
         try {
-            orderService.placeOrder(request, princpal.getName());
+            orderService.placeOrder(request, principal.getName());
             return ResponseEntity.ok("Order created successfully!");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());

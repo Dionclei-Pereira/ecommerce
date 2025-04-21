@@ -29,7 +29,7 @@ public class ProductController {
     public ResponseEntity<List<ProductDTO>> getAllProducts() {
         return ResponseEntity.ok().body(prodService.findAll());
     }
-
+    
     @PostMapping
     public ResponseEntity<ProductDTO> createProduct(@RequestBody @Valid ProductDTO product) {
     	try {
@@ -38,7 +38,7 @@ public class ProductController {
 			return ResponseEntity.badRequest().build();
 		}
     }
-
+    
     @GetMapping("/{id}")
     public ResponseEntity<ProductDTO> getProductById(@PathVariable Long id) {
     	try {

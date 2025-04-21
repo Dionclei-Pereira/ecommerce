@@ -1,6 +1,8 @@
-package me.dionclei.ecommerce_order_service.filters;
+package me.dionclei.ecommerce_product_service.configs;
 
 import java.io.IOException;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -12,24 +14,20 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import me.dionclei.auth.TokenService;
-import me.dionclei.auth.UserAuth;
 
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
 	
-    private final TokenService tokenService;
-
-    public SecurityFilter(TokenService tokenService) {
-        this.tokenService = tokenService;
-    }
-    
+	@Autowired
+	private TokenService service;
+	
 	@Override
-	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-		String token = request.getHeader("Authorization");
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+			throws ServletException, IOException {
+		var token = request.getHeader("Authorization");
 		if (token != null) {
-			UserAuth user = tokenService.validateToken(token);
+			var user = service.validateToken(token);
 			if (user != null) {
-
 				var roles = user.roles().stream().map(SimpleGrantedAuthority::new).toList();
 				var auth = new UsernamePasswordAuthenticationToken(user.id(), null, roles);
 				SecurityContextHolder.getContext().setAuthentication(auth);
@@ -37,4 +35,5 @@ public class SecurityFilter extends OncePerRequestFilter {
 		}
 		filterChain.doFilter(request, response);
 	}
+
 }

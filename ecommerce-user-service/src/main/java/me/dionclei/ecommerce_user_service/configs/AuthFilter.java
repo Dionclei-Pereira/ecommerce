@@ -1,4 +1,4 @@
-package me.dionclei.ecommerce_user_service.filters;
+package me.dionclei.ecommerce_user_service.configs;
 
 import java.io.IOException;
 import java.util.Optional;
