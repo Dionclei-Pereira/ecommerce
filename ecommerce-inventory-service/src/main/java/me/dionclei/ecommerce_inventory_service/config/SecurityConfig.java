@@ -1,4 +1,4 @@
-package me.dionclei.ecommerce_product_service.configs;
+package me.dionclei.ecommerce_inventory_service.config;
 
 import java.nio.file.Paths;
 
@@ -18,19 +18,20 @@ import me.dionclei.auth.TokenService;
 public class SecurityConfig {
 	
 	@Bean
-	SecurityFilterChain filterChain(HttpSecurity http, SecurityFilter filter) throws Exception {
-		return http.csrf(c -> c.disable())
+	SecurityFilterChain filterChain(HttpSecurity config, SecurityFilter filter) throws Exception {
+		return config.csrf(c -> c.disable())
 				.sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-				.authorizeHttpRequests(auth -> auth.requestMatchers(HttpMethod.POST, "/api/products").hasRole("ADMIN")
-						.requestMatchers(HttpMethod.GET, "api/products/{id}").permitAll()
-						.requestMatchers(HttpMethod.GET, "api/products").permitAll()
+				.authorizeHttpRequests(auth -> auth.requestMatchers(HttpMethod.GET, "api/inventory").permitAll()
+						.requestMatchers(HttpMethod.GET, "api/inventory/{productCode}").permitAll()
+						.requestMatchers(HttpMethod.POST, "api/inventory").hasRole("ADMIN")
+						.requestMatchers(HttpMethod.PATCH, "api/inventory/{productCode}").hasRole("ADMIN")
 						.anyRequest().authenticated())
 				.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
 				.build();
 	}
 	
 	@Bean
-	TokenService tokenService() throws Exception {
+	TokenService service() throws Exception {
 		return new TokenService(Paths.get("../public_key.pem"));
 	}
 }

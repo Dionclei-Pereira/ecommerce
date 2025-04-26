@@ -31,7 +31,7 @@ public class InventoryController {
         boolean available = service.isInStock(productCode, quantity);
         return ResponseEntity.ok(available);
     }
-    
+     
     @GetMapping("/{productCode}")
     public ResponseEntity<Integer> getStock(@PathVariable String productCode) {
         Integer quantity = service.getStock(productCode);
