@@ -53,7 +53,7 @@ public class OrderService {
             item.setQuantity(itemDto.quantity());
             orderItems.add(item);
 		}
-        Order order = new Order(null, Long.parseLong(id), Instant.now(), Status.PLACED, orderItems);
+        Order order = new Order(null, Long.parseLong(id), Instant.now(), Status.WAITING_PAYMENT, orderItems);
         
         orderRepository.save(order);
 	}

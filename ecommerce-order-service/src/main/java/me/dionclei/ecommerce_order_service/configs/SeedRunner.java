@@ -30,7 +30,7 @@ public class SeedRunner implements CommandLineRunner {
 		List<OrderItem> list2 = new ArrayList<>();
 		list2.add(item2);
 		
-		Order o1 = new Order(null, 1L, Instant.now(), Status.PLACED, list);
+		Order o1 = new Order(null, 1L, Instant.now(), Status.WAITING_PAYMENT, list);
 		Order o2 = new Order(null, 2L, Instant.now(), Status.REJECTED, list2);
 		repository.saveAll(Arrays.asList(o1, o2));
 	}
