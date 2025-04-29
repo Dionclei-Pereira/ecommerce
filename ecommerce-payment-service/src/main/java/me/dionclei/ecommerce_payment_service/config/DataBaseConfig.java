@@ -1,32 +1,24 @@
 package me.dionclei.ecommerce_payment_service.config;
 
-import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.datasource.init.DatabasePopulator;
+import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.r2dbc.core.DatabaseClient;
 
 import io.r2dbc.spi.ConnectionFactory;
-import reactor.core.publisher.Mono;
 
 @Configuration
-public class DataBaseConfig implements CommandLineRunner {
-	
-    private final ConnectionFactory connectionFactory;
+public class DataBaseConfig {
 
-    public DataBaseConfig(ConnectionFactory connectionFactory) {
-        this.connectionFactory = connectionFactory;
+    @Bean
+    DatabasePopulator databasePopulator() {
+        return new ResourceDatabasePopulator(new ClassPathResource("schema.sql"));
     }
-	
-	@Override
-	public void run(String... args) throws Exception {
-		String query =  """
-				CREATE TABLE Orders(
-					id TEXT PRIMARY KEY,
-					price REAL
-				);
-				""";
-		Mono.from(connectionFactory.create())
-        .flatMap(connection -> Mono.from(connection.createStatement(query).execute())
-                                   .doFinally(signalType -> connection.close()))
-        .block();
-	}
 
+    @Bean
+    DatabaseClient databaseClient(ConnectionFactory connectionFactory) {
+        return DatabaseClient.create(connectionFactory);
+    }
 }

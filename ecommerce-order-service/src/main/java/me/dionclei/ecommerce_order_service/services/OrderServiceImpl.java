@@ -16,19 +16,25 @@ import me.dionclei.ecommerce_order_service.entities.OrderItem;
 import me.dionclei.ecommerce_order_service.enums.Status;
 import me.dionclei.ecommerce_order_service.exceptions.InventoryException;
 import me.dionclei.ecommerce_order_service.exceptions.ProductException;
+import me.dionclei.ecommerce_order_service.exceptions.ResourceNotFoundException;
 import me.dionclei.ecommerce_order_service.repository.OrderRepository;
+import me.dionclei.ecommerce_order_service.services.interfaces.OrderService;
 
 @Service
-public class OrderService {
+public class OrderServiceImpl implements OrderService {
 	
 	private final OrderRepository orderRepository;
 	private final ProductClient productClient;
 	private final InventoryClient inventoryClient;
 	
-	public OrderService(OrderRepository orderRepository, ProductClient productClient, InventoryClient inventoryClient) {
+	public OrderServiceImpl(OrderRepository orderRepository, ProductClient productClient, InventoryClient inventoryClient) {
 		this.inventoryClient = inventoryClient;
 		this.productClient = productClient;
 		this.orderRepository = orderRepository;
+	}
+	
+	public Order save(Order order) {
+		return orderRepository.save(order);
 	}
 	
 	public void placeOrder(OrderRequest request, String id) {
@@ -61,5 +67,12 @@ public class OrderService {
 	public List<Order> findAll(Long id) {
 		return orderRepository.findAllById(id);
 	}
-
+	
+	public Order findById(Long id) {
+		var order = orderRepository.findById(id);
+		if (order.isPresent()) {
+			return order.get();
+		}
+		throw new ResourceNotFoundException("Order not Found");
+	}
 }

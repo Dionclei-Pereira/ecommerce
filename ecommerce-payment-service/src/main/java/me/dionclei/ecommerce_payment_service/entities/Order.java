@@ -3,7 +3,9 @@ package me.dionclei.ecommerce_payment_service.entities;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
-@Table("Orders")
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+@Table("TB_ORDERS")
 public class Order {
 	
 	@Id
@@ -13,7 +15,7 @@ public class Order {
 
 	public Order() {}
 	
-	public Order(String id, Double price) {
+	public Order(@JsonProperty("id") String id, @JsonProperty("amount") double price) {
 		super();
 		this.id = id;
 		this.price = price;

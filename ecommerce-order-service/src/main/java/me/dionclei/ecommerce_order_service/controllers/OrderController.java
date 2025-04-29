@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import me.dionclei.ecommerce_order_service.dto.OrderRequest;
 import me.dionclei.ecommerce_order_service.entities.Order;
-import me.dionclei.ecommerce_order_service.services.OrderService;
+import me.dionclei.ecommerce_order_service.services.interfaces.OrderService;
 
 @RestController
-@RequestMapping("/api/order")
+@RequestMapping("/api/orders")
 public class OrderController {
 	
     private final OrderService orderService;

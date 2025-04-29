@@ -1,11 +1,15 @@
 package me.dionclei.ecommerce_inventory_service.services;
 
+import java.util.List;
+
 import org.apache.commons.lang.NullArgumentException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import me.dionclei.ecommerce_inventory_service.dto.InventoryPostRequest;
 import me.dionclei.ecommerce_inventory_service.entities.Inventory;
+import me.dionclei.ecommerce_inventory_service.events.OrderItem;
+import me.dionclei.ecommerce_inventory_service.exceptions.OutOfStockException;
 import me.dionclei.ecommerce_inventory_service.exceptions.ResourceNotFoundException;
 import me.dionclei.ecommerce_inventory_service.repositories.InventoryRepository;
 import me.dionclei.ecommerce_inventory_service.services.interfaces.InventoryService;
@@ -45,5 +49,18 @@ public class InventoryServiceImpl implements InventoryService {
 		inventoryRepository.save(inv);
 		return inv;
 	}
-	
+
+	@Transactional
+	public void decrease(List<OrderItem> items) {
+	    for (OrderItem item : items) {
+	        Long id = item.id();
+	        if (!isInStock(id.toString(), item.quantity())) {
+	            throw new OutOfStockException("Item with id: " + id + " is out of stock");
+	        }
+	    }
+
+	    for (OrderItem item : items) {
+	        inventoryRepository.deleteById(item.id());
+	    }
+	}
 }
