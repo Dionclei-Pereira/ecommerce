@@ -25,7 +25,7 @@ public class InventoryServiceImpl implements InventoryService {
 	
 	public boolean isInStock(String productCode, Integer quantity) {
 		Inventory inv = inventoryRepository.findByProductCode(productCode);
-		return inv != null && inv.getQuantity() > quantity;
+		return inv != null && inv.getQuantity() >= quantity;
 	}
 	
 	public Integer getStock(String productCode) {
@@ -53,14 +53,18 @@ public class InventoryServiceImpl implements InventoryService {
 	@Transactional
 	public void decrease(List<OrderItem> items) {
 	    for (OrderItem item : items) {
-	        Long id = item.id();
+	        Long id = item.productId();
 	        if (!isInStock(id.toString(), item.quantity())) {
 	            throw new OutOfStockException("Item with id: " + id + " is out of stock");
 	        }
 	    }
 
 	    for (OrderItem item : items) {
-	        inventoryRepository.deleteById(item.id());
+	        var inv = inventoryRepository.findById(item.productId());
+	        if (inv.isPresent()) {
+	        	inv.get().setQuantity(inv.get().getQuantity() - item.quantity());
+	        	inventoryRepository.save(inv.get());
+	        }
 	    }
 	}
 }

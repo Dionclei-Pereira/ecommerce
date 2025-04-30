@@ -14,9 +14,11 @@ import me.dionclei.ecommerce_order_service.dto.ProductDTO;
 import me.dionclei.ecommerce_order_service.entities.Order;
 import me.dionclei.ecommerce_order_service.entities.OrderItem;
 import me.dionclei.ecommerce_order_service.enums.Status;
+import me.dionclei.ecommerce_order_service.events.OrderPlacedEvent;
 import me.dionclei.ecommerce_order_service.exceptions.InventoryException;
 import me.dionclei.ecommerce_order_service.exceptions.ProductException;
 import me.dionclei.ecommerce_order_service.exceptions.ResourceNotFoundException;
+import me.dionclei.ecommerce_order_service.publishers.OrderPlacedPublisher;
 import me.dionclei.ecommerce_order_service.repository.OrderRepository;
 import me.dionclei.ecommerce_order_service.services.interfaces.OrderService;
 
@@ -26,11 +28,14 @@ public class OrderServiceImpl implements OrderService {
 	private final OrderRepository orderRepository;
 	private final ProductClient productClient;
 	private final InventoryClient inventoryClient;
+	private OrderPlacedPublisher orderPlacedPublisher;
 	
-	public OrderServiceImpl(OrderRepository orderRepository, ProductClient productClient, InventoryClient inventoryClient) {
+	public OrderServiceImpl(OrderRepository orderRepository, ProductClient productClient
+			, InventoryClient inventoryClient, OrderPlacedPublisher orderPlacedPublisher) {
 		this.inventoryClient = inventoryClient;
 		this.productClient = productClient;
 		this.orderRepository = orderRepository;
+		this.orderPlacedPublisher = orderPlacedPublisher;
 	}
 	
 	public Order save(Order order) {
@@ -47,7 +52,13 @@ public class OrderServiceImpl implements OrderService {
 				throw new ProductException("Product with id " + itemDto.productId() + " was not found");
 			}
 			
-			boolean isInStock = inventoryClient.isInStock(itemDto.productId().toString(), itemDto.quantity());
+			boolean isInStock;
+			try {
+				isInStock = inventoryClient.isInStock(itemDto.productId().toString(), itemDto.quantity());
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
+				isInStock = false;
+			}
 			
             if (!isInStock) {
                 throw new InventoryException("Product with id " + itemDto.productId() + " is out of stock");
@@ -60,8 +71,9 @@ public class OrderServiceImpl implements OrderService {
             orderItems.add(item);
 		}
         Order order = new Order(null, Long.parseLong(id), Instant.now(), Status.WAITING_PAYMENT, orderItems);
+        var savedOrder = orderRepository.save(order);
         
-        orderRepository.save(order);
+        orderPlacedPublisher.publish(new OrderPlacedEvent(savedOrder.getId().toString(), savedOrder.getTotal()));
 	}
 
 	public List<Order> findAll(Long id) {

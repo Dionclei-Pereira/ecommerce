@@ -48,7 +48,7 @@ public class Order implements Serializable {
 	}
 	
 	public Double getTotal() {
-		return items.stream().map(i -> i.getPrice()).reduce(0.0, Double::sum);
+		return items.stream().map(i -> i.getPrice() * i.getQuantity()).reduce(0.0, Double::sum);
 	}
 	
 	public Long getId() {

@@ -31,6 +31,42 @@ public class MessagingConfig {
         return new Queue("order.canceled.queue");
     }
     
+	@Bean
+	Queue inventoryOutOfStockQueue() {
+		return new Queue("inventory.out-of-stock.queue");
+	}
+	
+	@Bean
+	Queue inventoryDecreasedQueue() {
+		return new Queue("inventory.decreased.order.queue");
+	}
+    
+	@Bean
+	Queue paymentCompletedQueue() {
+		return new Queue("payment.completed.queue");
+	}
+	
+    @Bean
+    Binding paymentCompletedBinding(Queue paymentCompletedQueue, TopicExchange ecommerceExchange) {
+        return BindingBuilder.bind(paymentCompletedQueue)
+                .to(ecommerceExchange)
+                .with("payment.completed");
+    }
+	
+	@Bean
+	Binding InventoryDecreasedBinding(Queue inventoryDecreasedQueue, TopicExchange ecommerceExchange) {
+		return BindingBuilder.bind(inventoryDecreasedQueue)
+				.to(ecommerceExchange)
+				.with("inventory.decreased");
+	}
+	
+    @Bean
+    Binding InventoryOutOfStockBinding(Queue inventoryOutOfStockQueue, TopicExchange ecommerceExchange) {
+        return BindingBuilder.bind(inventoryOutOfStockQueue)
+                .to(ecommerceExchange)
+                .with("inventory.out-of-stock");
+    }
+    
     @Bean
     Binding orderPaidBinding(Queue orderPaidQueue, TopicExchange ecommerceExchange) {
         return BindingBuilder.bind(orderPaidQueue)
@@ -43,29 +79,5 @@ public class MessagingConfig {
     	return BindingBuilder.bind(orderCanceledQueue)
     			.to(ecommerceExchange)
     			.with("order.canceled");
-    }
-    
-	@Bean
-	Queue PaymentCompletedQueue() {
-		return new Queue("payment.completed.queue");
-	}
-	
-    @Bean
-    Binding PaymentCompletedBinding(Queue PaymentCompletedQueue, TopicExchange ecommerceExchange) {
-        return BindingBuilder.bind(PaymentCompletedQueue)
-                .to(ecommerceExchange)
-                .with("payment.completed");
-    }
-    
-	@Bean
-	Queue InventoryOutOfStockQueue() {
-		return new Queue("inventory.out-of-stock.queue");
-	}
-	
-    @Bean
-    Binding InventoryOutOfStockBinding(Queue InventoryOutOfStockQueue, TopicExchange ecommerceExchange) {
-        return BindingBuilder.bind(InventoryOutOfStockQueue)
-                .to(ecommerceExchange)
-                .with("inventory.out-of-stock");
     }
 }

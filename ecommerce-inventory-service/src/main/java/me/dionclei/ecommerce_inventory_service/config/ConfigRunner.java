@@ -15,7 +15,7 @@ public class ConfigRunner implements CommandLineRunner {
 	
 	public void run(String... args) throws Exception {
 		
-		inventoryRepository.save(new Inventory(null, "1", 100));
+		inventoryRepository.save(new Inventory(null, "1", 2));
 		inventoryRepository.save(new Inventory(null, "2", 50));
 		
 	}

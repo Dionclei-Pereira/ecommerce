@@ -4,6 +4,7 @@ import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.TopicExchange;
+import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,21 +12,19 @@ import org.springframework.context.annotation.Configuration;
 public class MessagingConfig {
 	
 	@Bean
+	Jackson2JsonMessageConverter messageConverter() {
+		return new Jackson2JsonMessageConverter();
+	}
+	
+	@Bean
 	TopicExchange ecommerceExchange() {
 		return new TopicExchange("ecommerce.exchange");
 	}
 	
 	@Bean
-	Queue InventoryOutOfStockQueue() {
+	Queue inventoryOutOfStockQueue() {
 		return new Queue("inventory.out-of-stock.queue");
 	}
-	
-    @Bean
-    Binding InventoryOutOfStockBinding(Queue InventoryOutOfStockQueue, TopicExchange ecommerceExchange) {
-        return BindingBuilder.bind(InventoryOutOfStockQueue)
-                .to(ecommerceExchange)
-                .with("inventory.out-of-stock");
-    }
     
 	@Bean
 	Queue orderPaidQueue() {
@@ -35,6 +34,13 @@ public class MessagingConfig {
     @Bean
     Queue orderCanceledQueue() {
         return new Queue("order.canceled.queue");
+    }
+    
+    @Bean
+    Binding inventoryOutOfStockBinding(Queue inventoryOutOfStockQueue, TopicExchange ecommerceExchange) {
+        return BindingBuilder.bind(inventoryOutOfStockQueue)
+                .to(ecommerceExchange)
+                .with("inventory.out-of-stock");
     }
     
     @Bean

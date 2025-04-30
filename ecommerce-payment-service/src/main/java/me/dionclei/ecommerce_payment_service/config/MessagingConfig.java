@@ -24,13 +24,37 @@ public class MessagingConfig {
 	}
 	
 	@Bean
-	Queue PaymentCompletedQueue() {
+	Queue orderCanceledQueue() {
+		return new Queue("order.canceled.queue");
+	}
+	
+	@Bean
+	Queue orderPlacedQueue() {
+		return new Queue("order.placed.queue");
+	}
+	
+	@Bean
+	Queue paymentCompletedQueue() {
 		return new Queue("payment.completed.queue");
 	}
 	
+	@Bean
+	Binding orderCanceledBinding(Queue orderCanceledQueue, TopicExchange ecommerceExchange) {
+		return BindingBuilder.bind(orderCanceledQueue)
+				.to(ecommerceExchange)
+				.with("order.canceled");
+	}
+	
+	@Bean
+	Binding orderPlacedBinding(Queue orderPlacedQueue, TopicExchange ecommerceExchange) {
+		return BindingBuilder.bind(orderPlacedQueue)
+				.to(ecommerceExchange)
+				.with("order.placed");
+	}
+	
     @Bean
-    Binding PaymentCompletedBinding(Queue PaymentCompletedQueue, TopicExchange ecommerceExchange) {
-        return BindingBuilder.bind(PaymentCompletedQueue)
+    Binding paymentCompletedBinding(Queue paymentCompletedQueue, TopicExchange ecommerceExchange) {
+        return BindingBuilder.bind(paymentCompletedQueue)
                 .to(ecommerceExchange)
                 .with("payment.completed");
     }
