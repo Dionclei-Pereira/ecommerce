@@ -25,10 +25,11 @@ public class InventoryController {
     public InventoryController(InventoryService service) {
         this.service = service;
     }
-
+    
     @GetMapping
     public ResponseEntity<Boolean> isInStock(@RequestParam String productCode, @RequestParam(defaultValue = "1") Integer quantity) {
-        boolean available = service.isInStock(productCode, quantity);
+        if (productCode == null || productCode.isBlank()) return ResponseEntity.ok(false);
+    	boolean available = service.isInStock(productCode, quantity);
         return ResponseEntity.ok(available);
     }
      
