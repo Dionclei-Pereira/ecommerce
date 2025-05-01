@@ -16,32 +16,33 @@ This project implements a microservice structure. The main objective is to creat
 
 The main technologies used in this project are:
 
-- ✅ Java 21 
-- ✅ Spring Boot  
-- ✅ Hibernate
-- ✅ WebFlux
-- ✅ RabbitMQ
-- ✅ H2 DataBase
-- ✅ Spring Security
-- ✅ JWT - RSA
+- ⚙️ Java 21  
+- 🌱 Spring Boot  
+- 🛠️ Hibernate  
+- 🔁 WebFlux  
+- 📬 RabbitMQ  
+- 🗄️ H2 DataBase  
+- 🔐 Spring Security  
+- 🔑 JWT - RSA  
 
 ## 🎯 **Features**
-- ✅ Users  
-- ✅ Authentication
-- ✅ Orders  
-- ✅ Products
-- ✅ Inventory
-- ✅ Payment
+
+- 👤 Users  
+- 🔐 Authentication  
+- 📦 Orders  
+- 🛒 Products  
+- 🧮 Inventory  
+- 💳 Payment  
 
 ## ⚙ Prerequisites
 
 Install these programs:
 
-- **Java 21**
-- **IDE** (IntelliJ IDEA, Eclipse, VSCode.)
-- **Maven**
-- **RabbitMQ**
-- **Postman** (or similar.)
+- ☕ **Java 21**
+- 💻 **IDE** (IntelliJ IDEA, Eclipse, VSCode.)
+- 📦 **Maven**
+- 🐰 **RabbitMQ**
+- 📫 **Postman** (or similar.)
 
 ## ⚡ Steps to Run the Project
 
