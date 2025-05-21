@@ -57,11 +57,13 @@ git clone https://github.com/Dionclei-Pereira/ecommerce.git
 ### 2. Build the application
 
 ```bash
-docker-compose --build
+docker-compose build
 ```
 
 
 ### 3. Run the Project
+
+To run the project, you must start first the config-server then discovery server and finaly the orders services.
 
 ```bash
 docker-compose up -d ecommerce-config-server
@@ -70,8 +72,6 @@ docker-compose up -d ecommerce-discovery-server
 
 docker-compose up -d
 ```
-
-To run the project, you can use your IDE or Maven CLI, you must start config-server, discovery server and gateway services.
 
 ### 4. Testing the API
 
