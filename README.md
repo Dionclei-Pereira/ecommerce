@@ -24,24 +24,24 @@ The main technologies used in this project are:
 - 🗄️ H2 DataBase  
 - 🔐 Spring Security  
 - 🔑 JWT - RSA  
+- 🐳 Docker & Docker Compose
 
 ## 🎯 **Features**
 
-- 👤 Users  
-- 🔐 Authentication  
-- 📦 Orders  
-- 🛒 Products  
-- 🧮 Inventory  
-- 💳 Payment  
+- 👤 User Registration and Login
+- 🔐 Authentication and Authorization (JWT)
+- 📦 Product Management
+- 🧮 Inventory System
+- 💳 Order and Payment Processing
+- 📡 Service Discovery (Eureka)
+- ⚙ Config Server (Centralized Configuration)
+- 📫 Async messaging with RabbitMQ
 
 ## ⚙ Prerequisites
 
 Install these programs:
 
-- ☕ **Java 21**
-- 💻 **IDE** (IntelliJ IDEA, Eclipse, VSCode.)
-- 📦 **Maven**
-- 🐰 **RabbitMQ**
+- 🐳 Docker & Docker Compose
 - 📫 **Postman** (or similar.)
 
 ## ⚡ Steps to Run the Project
@@ -54,26 +54,26 @@ Clone the project to your local environment:
 git clone https://github.com/Dionclei-Pereira/ecommerce.git
 ```
 
-### 2. Configure RabbitMQ
+### 2. Build the application
 
-Install RabbitMQ and Erlang at your machine and start it, you can also run these commands to enable the web panel
 ```bash
-rabbitmq-plugins enable
-rabbitmq_management
+docker-compose --build
 ```
 
-### 3. Build the Token Service Library
 
-Open a cmd at "ecommerce\libs\auth-lib" and run the command
+### 3. Run the Project
+
 ```bash
-mvn clean install
-```
+docker-compose up -d ecommerce-config-server
 
-### 4. Run the Project
+docker-compose up -d ecommerce-discovery-server
+
+docker-compose up -d
+```
 
 To run the project, you can use your IDE or Maven CLI, you must start config-server, discovery server and gateway services.
 
-### 5. Testing the API
+### 4. Testing the API
 
 Some services are configured to allow login. You can use **Postman** to test the routes and to generate a JWT token you must run user-service.
 

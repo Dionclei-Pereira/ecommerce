@@ -67,7 +67,7 @@ public class TokenServiceRSA implements TokenService {
 	}
 	
 	private RSAPrivateKey generatePrivateKey() throws IOException, InvalidKeySpecException, NoSuchAlgorithmException {
-	    byte[] keyBytes = Files.readAllBytes(Paths.get("../private_key.pem"));
+	    byte[] keyBytes = Files.readAllBytes(Paths.get("/app/private_key.pem"));
 	    String privateKeyPEM = new String(keyBytes)
 	        .replaceAll("-----BEGIN PRIVATE KEY-----", "")
 	        .replaceAll("-----END PRIVATE KEY-----", "")
@@ -78,7 +78,7 @@ public class TokenServiceRSA implements TokenService {
 	}
 
 	private RSAPublicKey generatePublicKey() throws IOException, InvalidKeySpecException, NoSuchAlgorithmException {
-	    byte[] keyBytes = Files.readAllBytes(Paths.get("../public_key.pem"));
+	    byte[] keyBytes = Files.readAllBytes(Paths.get("/app/public_key.pem"));
 	    String publicKeyPEM = new String(keyBytes)
 	        .replaceAll("-----BEGIN PUBLIC KEY-----", "")
 	        .replaceAll("-----END PUBLIC KEY-----", "")

@@ -1,0 +1,107 @@
+services:
+    rabbitmq:
+        image: rabbitmq:3-management
+        container_name: rabbitmq
+        ports:
+          - "5672:5672"
+          - "15672:15672"
+        environment:
+            RABBITMQ_DEFAULT_USER: guest
+            RABBITMQ_DEFAULT_PASS: guest
+    ecommerce-config-server:
+      build: ./ecommerce-config-server
+      ports:
+        - "8888:8888"
+      networks:
+        - "ecommerce-net"
+    ecommerce-discovery-server:
+      build: ./ecommerce-discovery-server
+      ports:
+        - "8761:8761"
+      networks:
+        - "ecommerce-net"
+      depends_on:
+        - ecommerce-config-server
+    ecommerce-gateway:
+      build: ./ecommerce-gateway
+      ports:
+        - "8080:8080"
+      networks:
+        - "ecommerce-net"
+      depends_on:
+        - ecommerce-config-server
+        - ecommerce-discovery-server
+    ecommerce-product-service:
+      build:
+        context: .
+        dockerfile: ecommerce-product-service/Dockerfile
+      ports:
+        - "8081:8081"
+      volumes:
+        - ./public_key.pem:/app/public_key.pem
+      networks:
+        - "ecommerce-net"
+      depends_on:
+        - ecommerce-config-server
+        - ecommerce-discovery-server
+        - rabbitmq
+    ecommerce-order-service:
+      build:
+        context: .
+        dockerfile: ecommerce-order-service/Dockerfile
+      ports:
+        - "8083:8083"
+      networks:
+        - "ecommerce-net"
+      volumes:
+        - ./public_key.pem:/app/public_key.pem
+      depends_on:
+        - ecommerce-config-server
+        - ecommerce-discovery-server
+        - rabbitmq
+    ecommerce-inventory-service:
+      build:
+        context: .
+        dockerfile: ecommerce-inventory-service/Dockerfile
+      ports:
+        - "8082:8082"
+      networks:
+        - "ecommerce-net"
+      volumes:
+        - ./public_key.pem:/app/public_key.pem
+      depends_on:
+        - ecommerce-config-server
+        - ecommerce-discovery-server
+        - rabbitmq
+    ecommerce-user-service:
+      build:
+        context: .
+        dockerfile: ecommerce-user-service/Dockerfile
+      ports:
+        - "8084:8084"
+      volumes:
+        - ./public_key.pem:/app/public_key.pem
+        - ./private_key.pem:/app/private_key.pem
+      networks:
+        - "ecommerce-net"
+      depends_on:
+        - ecommerce-config-server
+        - ecommerce-discovery-server
+    ecommerce-payment-service:
+      build:
+        context: .
+        dockerfile: ecommerce-payment-service/Dockerfile
+      ports:
+        - "8085:8085"
+      volumes:
+        - ./public_key.pem:/app/public_key.pem
+      networks:
+        - "ecommerce-net"
+      depends_on:
+        - ecommerce-config-server
+        - ecommerce-discovery-server
+        - rabbitmq
+
+networks:
+  ecommerce-net:
+    driver: bridge

@@ -31,6 +31,6 @@ public class SecurityConfig {
 	
 	@Bean
 	TokenService tokenService() throws Exception {
-		return new TokenService(Paths.get("../public_key.pem"));
+		return new TokenService(Paths.get("/app/public_key.pem"));
 	}
 }
