@@ -2,7 +2,7 @@ package me.dionclei.ecommerce_payment_service.listeners;
 
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
+import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.stereotype.Service;
 
 import me.dionclei.ecommerce_payment_service.entities.Order;
@@ -13,10 +13,10 @@ import reactor.core.publisher.Mono;
 public class OrderPlacedListener {
 	
 	@Autowired
-	private R2dbcEntityTemplate template;
+	private ReactiveMongoTemplate template;
 
 	public Mono<Void> saveOrder(Order order) {
-	    return template.insert(Order.class).using(order).then();
+	    return template.insert(order).then();
 	}
 	
 	@RabbitListener(queues = "order.placed.queue")

@@ -1,11 +1,11 @@
 package me.dionclei.ecommerce_payment_service.entities;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Table;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-@Table("TB_ORDERS")
+@Document
 public class Order {
 	
 	@Id
