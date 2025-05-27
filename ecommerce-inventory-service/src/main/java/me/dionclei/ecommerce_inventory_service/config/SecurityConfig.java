@@ -11,6 +11,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import jakarta.servlet.http.HttpServletResponse;
 import me.dionclei.auth.TokenService;
 
 @Configuration
@@ -25,7 +26,10 @@ public class SecurityConfig {
 						.requestMatchers(HttpMethod.GET, "api/inventory/{productCode}").permitAll()
 						.requestMatchers(HttpMethod.POST, "api/inventory").hasRole("ADMIN")
 						.requestMatchers(HttpMethod.PATCH, "api/inventory/{productCode}").hasRole("ADMIN")
-						.anyRequest().authenticated())
+						.anyRequest().permitAll())
+				.exceptionHandling(e -> e.authenticationEntryPoint((request, response, ex) -> {
+					response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+				}))
 				.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
 				.build();
 	}
